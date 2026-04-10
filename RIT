@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Success: The First 30 Days</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --secondary: #64748b;
+            --success: #22c55e;
+            --dark: #1e293b;
+            --light: #f8fafc;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e2e8f0;
+            color: var(--dark);
+            line-height: 1.6;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background: white;
+            width: 90%;
+            max-width: 800px;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        h1 { color: var(--primary); text-align: center; }
+        
+        .progress-container {
+            background: #edf2f7;
+            border-radius: 20px;
+            height: 10px;
+            margin: 20px 0;
+        }
+
+        #progress-bar {
+            background: var(--primary);
+            height: 100%;
+            width: 0%;
+            border-radius: 20px;
+            transition: width 0.4s ease;
+        }
+
+        .scenario-card {
+            border: 1px solid #e2e8f0;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .options {
+            display: grid;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        button {
+            padding: 12px;
+            border: 2px solid var(--primary);
+            background: transparent;
+            color: var(--primary);
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        #feedback {
+            margin-top: 20px;
+            padding: 1rem;
+            border-radius: 6px;
+            display: none;
+        }
+
+        .correct { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
+        .incorrect { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🎓 Freshman Flight Check</h1>
+    <p>Test your intuition on navigating your first semester.</p>
+    
+    <div class="progress-container">
+        <div id="progress-bar"></div>
+    </div>
+
+    <div id="game-area">
+        <div class="scenario-card">
+            <h3 id="question-text">Loading scenario...</h3>
+            <div id="options-container" class="options"></div>
+        </div>
+        <div id="feedback"></div>
+    </div>
+</div>
+
+<script>
+    const scenarios = [
+        {
+            q: "You missed a lecture because you overslept. What is your first move?",
+            options: [
+                { text: "Email the professor asking 'Did I miss anything important?'", correct: false, tip: "Never ask this! It implies your class isn't usually important." },
+                { text: "Check the syllabus, download slides, and ask a peer for notes.", correct: true, tip: "Correct! Take initiative before reaching out to the prof." },
+                { text: "Wait until the next class to see what happened.", correct: false, tip: "In college, a 'wait and see' approach leads to falling behind quickly." }
+            ]
+        },
+        {
+            q: "You are struggling with a complex math concept. Where do you go?",
+            options: [
+                { text: "The Professor's Office Hours", correct: true, tip: "Yes! This shows engagement and helps you network." },
+                { text: "Back to your dorm to grind it out alone", correct: false, tip: "Isolation is the enemy of progress. Use your campus resources!" },
+                { text: "The Student Union", correct: false, tip: "Great for socializing, bad for calculus help." }
+            ]
+        }
+    ];
+
+    let currentStep = 0;
+
+    function loadScenario() {
+        const feedback = document.getElementById('feedback');
+        feedback.style.display = 'none';
+        
+        const scenario = scenarios[currentStep];
+        document.getElementById('question-text').innerText = scenario.q;
+        
+        const optionsDiv = document.getElementById('options-container');
+        optionsDiv.innerHTML = '';
+        
+        scenario.options.forEach(opt => {
+            const btn = document.createElement('button');
+            btn.innerText = opt.text;
+            btn.onclick = () => handleChoice(opt);
+            optionsDiv.appendChild(btn);
+        });
+
+        const progress = ((currentStep) / scenarios.length) * 100;
+        document.getElementById('progress-bar').style.width = progress + '%';
+    }
+
+    function handle
